@@ -1,1720 +1,1008 @@
----
-layout: null
-title: Database Designer Study – Project Charter
-description: Clean, accessible single-file project charter ready for GitHub Pages.
----
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Database Designer Study - Project Charter</title>
-<style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-            color: #333;
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        /* Animated background particles */
-        .background-animation {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        .particle {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            animation: float 20s infinite linear;
-        }
-
-        @keyframes float {
-            0% {
-                transform: translateY(100vh) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-100px) rotate(360deg);
-                opacity: 0;
-            }
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 24px;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .header {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-            color: white;
-            padding: 60px 40px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20"><defs><radialGradient id="a" cx="50%" cy="40%"><stop offset="0%" stop-color="rgba(255,255,255,0.1)"/><stop offset="100%" stop-color="rgba(255,255,255,0)"/></radialGradient></defs><rect width="100" height="20" fill="url(%23a)"/></svg>') repeat-x;
-            opacity: 0.1;
-        }
-
-        .header::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                radial-gradient(circle at 20% 30%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 40% 80%, rgba(119, 198, 255, 0.3) 0%, transparent 50%);
-            animation: headerGlow 8s ease-in-out infinite alternate;
-        }
-
-        @keyframes headerGlow {
-            0% { opacity: 0.3; }
-            100% { opacity: 0.7; }
-        }
-        
-        .header h1 {
-            font-size: 3.5rem;
-            font-weight: 800;
-            margin-bottom: 15px;
-            background: linear-gradient(45deg, #ffffff, #a8edea, #fed6e3);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            position: relative;
-            z-index: 1;
-            animation: titlePulse 3s ease-in-out infinite alternate;
-        }
-
-        @keyframes titlePulse {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.05); }
-        }
-        
-        .header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            font-weight: 300;
-            position: relative;
-            z-index: 1;
-        }
-
-        .nav-tabs {
-            display: flex;
-            background: rgba(0, 0, 0, 0.02);
-            padding: 0;
-            margin: 0;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-            overflow-x: auto;
-        }
-
-        .nav-tab {
-            background: none;
-            border: none;
-            padding: 20px 24px;
-            cursor: pointer;
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: #64748b;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            white-space: nowrap;
-            border-bottom: 3px solid transparent;
-        }
-
-        .nav-tab:hover {
-            color: #1e293b;
-            background: rgba(99, 102, 241, 0.05);
-        }
-
-        .nav-tab.active {
-            color: #6366f1;
-            border-bottom-color: #6366f1;
-            background: rgba(99, 102, 241, 0.08);
-        }
-        
-        .content {
-            padding: 40px;
-        }
-        
-        .student-info {
-            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-            border-radius: 16px;
-            padding: 32px;
-            margin-bottom: 40px;
-            border: 1px solid rgba(14, 165, 233, 0.1);
-            position: relative;
-            overflow: hidden;
-            animation: slideInUp 0.8s ease-out;
-        }
-
-        @keyframes slideInUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .student-info::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, #0ea5e9, #3b82f6, #8b5cf6, #ec4899);
-            background-size: 400% 400%;
-            animation: gradientShift 3s ease infinite;
-        }
-
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        
-        .student-info h3 {
-            color: #0c4a6e;
-            margin-bottom: 24px;
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-        
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
-        
-        .info-item {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .info-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
-            transition: left 0.6s;
-        }
-
-        .info-item:hover::before {
-            left: 100%;
-        }
-
-        .info-item:hover {
-            transform: translateY(-5px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-        }
-        
-        .info-label {
-            font-weight: 600;
-            color: #0c4a6e;
-            font-size: 0.875rem;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .info-value {
-            font-size: 1.1rem;
-            color: #1e293b;
-            font-weight: 500;
-        }
-        
-        .section {
-            margin-bottom: 24px;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            overflow: hidden;
-            border: 1px solid rgba(0, 0, 0, 0.06);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            opacity: 0;
-            animation: fadeInStagger 0.6s ease-out forwards;
-        }
-
-        .section:nth-child(1) { animation-delay: 0.1s; }
-        .section:nth-child(2) { animation-delay: 0.2s; }
-        .section:nth-child(3) { animation-delay: 0.3s; }
-        .section:nth-child(4) { animation-delay: 0.4s; }
-        .section:nth-child(5) { animation-delay: 0.5s; }
-        .section:nth-child(6) { animation-delay: 0.6s; }
-        .section:nth-child(7) { animation-delay: 0.7s; }
-        .section:nth-child(8) { animation-delay: 0.8s; }
-        .section:nth-child(9) { animation-delay: 0.9s; }
-
-        @keyframes fadeInStagger {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .section:hover {
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
-            transform: translateY(-4px);
-        }
-
-        .section-header {
-            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-            padding: 24px 32px;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .section-header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.1), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .section-header:hover::before {
-            left: 100%;
-        }
-
-        .section-header:hover {
-            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
-            transform: scale(1.01);
-        }
-        
-        .section-title {
-            margin: 0;
-            color: #1e293b;
-            font-size: 1.4rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .section-icon {
-            font-size: 1.5rem;
-            transition: transform 0.3s ease;
-        }
-
-        .section.collapsed .section-icon {
-            transform: rotate(-90deg);
-        }
-        
-        .section-content {
-            padding: 32px;
-            display: block;
-            transition: all 0.3s ease;
-        }
-
-        .section.collapsed .section-content {
-            display: none;
-        }
-        
-        .placeholder {
-            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
-            border: 2px solid #f59e0b;
-            border-radius: 12px;
-            padding: 24px;
-            margin: 16px 0;
-            color: #92400e;
-            position: relative;
-        }
-
-        .placeholder::before {
-            content: '💡';
-            position: absolute;
-            top: -10px;
-            left: 16px;
-            background: #fef3c7;
-            padding: 4px 8px;
-            border-radius: 8px;
-            font-size: 1.2rem;
-        }
-        
-        .completed-work {
-            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
-            border: 2px solid #16a34a;
-            border-radius: 12px;
-            padding: 24px;
-            margin: 16px 0;
-            position: relative;
-        }
-
-        .completed-work::before {
-            content: '✅';
-            position: absolute;
-            top: -10px;
-            left: 16px;
-            background: #dcfce7;
-            padding: 4px 8px;
-            border-radius: 8px;
-            font-size: 1.2rem;
-        }
-        
-        .completed-header {
-            color: #15803d;
-            font-weight: 700;
-            margin-bottom: 12px;
-            font-size: 1.1rem;
-        }
-        
-        .scope-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 24px;
-            margin-top: 24px;
-        }
-        
-        .scope-card {
-            background: white;
-            border-radius: 16px;
-            padding: 24px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            border-left: 5px solid;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .scope-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: inherit;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .scope-card:hover::before {
-            opacity: 0.1;
-        }
-
-        .scope-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-        }
-        
-        .scope-card.in-scope {
-            border-left-color: #16a34a;
-            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-        }
-
-        .scope-card.in-scope:hover {
-            box-shadow: 0 20px 40px rgba(22, 163, 74, 0.3);
-        }
-        
-        .scope-card.roadmap {
-            border-left-color: #0ea5e9;
-            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-        }
-
-        .scope-card.roadmap:hover {
-            box-shadow: 0 20px 40px rgba(14, 165, 233, 0.3);
-        }
-        
-        .scope-card.out-scope {
-            border-left-color: #dc2626;
-            background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
-        }
-
-        .scope-card.out-scope:hover {
-            box-shadow: 0 20px 40px rgba(220, 38, 38, 0.3);
-        }
-        
-        .scope-card h4 {
-            margin-bottom: 16px;
-            font-size: 1.2rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .scope-card ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .scope-card li {
-            padding: 8px 0;
-            padding-left: 24px;
-            position: relative;
-        }
-
-        .scope-card li::before {
-            content: '•';
-            position: absolute;
-            left: 8px;
-            color: inherit;
-            font-weight: bold;
-        }
-        
-        .stakeholder-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 24px;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-        }
-        
-        .stakeholder-table th {
-            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-            color: white;
-            padding: 16px 12px;
-            text-align: left;
-            font-size: 0.9rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .stakeholder-table td {
-            padding: 16px 12px;
-            border-bottom: 1px solid #e2e8f0;
-            font-size: 0.9rem;
-            vertical-align: top;
-        }
-        
-        .stakeholder-table tr:hover {
-            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-        }
-
-        .stakeholder-table tr:last-child td {
-            border-bottom: none;
-        }
-        
-        .power-interest-grid {
-            margin: 32px 0;
-            text-align: center;
-        }
-        
-        .grid-placeholder {
-            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
-            border: 2px dashed #94a3b8;
-            border-radius: 16px;
-            padding: 48px 24px;
-            color: #64748b;
-            font-style: italic;
-            transition: all 0.3s ease;
-        }
-
-        .grid-placeholder:hover {
-            background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
-            border-color: #64748b;
-        }
-
-        .grid-placeholder img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-        }
-        
-        .instructions {
-            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-            border-radius: 12px;
-            padding: 20px;
-            margin: 20px 0;
-            font-size: 0.95rem;
-            color: #1e40af;
-            border-left: 4px solid #3b82f6;
-        }
-        
-        .instructions strong {
-            display: block;
-            margin-bottom: 12px;
-            font-size: 1.1rem;
-        }
-
-        .instructions ul {
-            margin-left: 16px;
-        }
-
-        /* Progress indicator */
-        .reading-progress {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 0%;
-            height: 4px;
-            background: linear-gradient(90deg, #6366f1, #8b5cf6, #ec4899);
-            z-index: 9999;
-            transition: width 0.1s ease;
-        }
-
-        /* Scroll to top button */
-        .scroll-to-top {
-            position: fixed;
-            bottom: 24px;
-            left: 24px;
-            background: linear-gradient(135deg, #ec4899 0%, #f97316 100%);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            cursor: pointer;
-            font-size: 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 1001;
-            opacity: 0;
-            transform: translateY(100px) scale(0.8);
-            box-shadow: 0 8px 20px rgba(236, 72, 153, 0.3);
-        }
-
-        .scroll-to-top.visible {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-        }
-
-        .scroll-to-top::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            border-radius: 50%;
-            background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.3) 50%, transparent 70%);
-            transform: translateX(-100%);
-            transition: transform 0.6s;
-        }
-
-        .scroll-to-top:hover::before {
-            transform: translateX(100%);
-        }
-
-        .scroll-to-top:hover {
-            transform: translateY(-4px) scale(1.1);
-            box-shadow: 0 16px 32px rgba(236, 72, 153, 0.5);
-        }
-
-        .scroll-to-top:active {
-            transform: translateY(-2px) scale(1.05);
-        }
-
-        /* Progress ring for scroll button */
-        .scroll-progress-ring {
-            position: absolute;
-            top: -4px;
-            left: -4px;
-            width: 68px;
-            height: 68px;
-            transform: rotate(-90deg);
-        }
-
-        .scroll-progress-ring circle {
-            fill: transparent;
-            stroke: rgba(255, 255, 255, 0.3);
-            stroke-width: 3;
-            stroke-dasharray: 207.35; /* 2 * π * r where r = 33 */
-            stroke-dashoffset: 207.35;
-            transition: stroke-dashoffset 0.1s ease;
-        }
-
-        /* Theme toggle button */
-        .theme-toggle {
-            position: fixed;
-            top: 24px;
-            right: 24px;
-            background: rgba(255, 255, 255, 0.9);
-            border: none;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            cursor: pointer;
-            font-size: 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            z-index: 1001;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .theme-toggle:hover {
-            transform: rotate(180deg) scale(1.1);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Dark theme */
-        body.dark {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            color: #e2e8f0;
-        }
-
-        body.dark .container {
-            background: rgba(30, 41, 59, 0.95);
-        }
-
-        body.dark .section {
-            background: #334155;
-            border-color: rgba(255, 255, 255, 0.1);
-        }
-
-        body.dark .section-header {
-            background: linear-gradient(135deg, #475569 0%, #64748b 100%);
-            color: #e2e8f0;
-        }
-
-        body.dark .info-item {
-            background: #475569;
-            color: #e2e8f0;
-        }
-
-        body.dark .stakeholder-table th {
-            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-        }
-
-        body.dark .stakeholder-table td {
-            color: #e2e8f0;
-            border-bottom-color: rgba(255, 255, 255, 0.1);
-        }
-
-        /* Floating action menu */
-        .floating-menu {
-            position: fixed;
-            bottom: 100px;
-            right: 24px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            z-index: 1000;
-        }
-
-        .floating-action {
-            background: rgba(255, 255, 255, 0.9);
-            border: none;
-            border-radius: 50%;
-            width: 48px;
-            height: 48px;
-            cursor: pointer;
-            font-size: 1.2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            opacity: 0;
-            transform: translateX(100px);
-            animation: slideInRight 0.6s ease-out forwards;
-        }
-
-        .floating-action:nth-child(1) { animation-delay: 0.1s; }
-        .floating-action:nth-child(2) { animation-delay: 0.2s; }
-        .floating-action:nth-child(3) { animation-delay: 0.3s; }
-
-        @keyframes slideInRight {
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .floating-action:hover {
-            transform: scale(1.1);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-        }
-
-        .expand-all {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            padding: 16px 24px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 1000;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .expand-all::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.3) 50%, transparent 70%);
-            transform: translateX(-100%);
-            transition: transform 0.6s;
-        }
-
-        .expand-all:hover::before {
-            transform: translateX(100%);
-        }
-
-        .expand-all:hover {
-            transform: translateY(-4px) scale(1.05);
-            box-shadow: 0 16px 32px rgba(99, 102, 241, 0.5);
-        }
-
-        .expand-all:active {
-            transform: translateY(-2px) scale(1.02);
-        }
-        
-        @media (max-width: 768px) {
-            body {
-                padding: 12px;
-            }
-            
-            .header {
-                padding: 40px 24px;
-            }
-
-            .header h1 {
-                font-size: 2.5rem;
-            }
-            
-            .content {
-                padding: 24px;
-            }
-
-            .student-info {
-                padding: 24px;
-            }
-            
-            .info-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .scope-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .nav-tabs {
-                flex-wrap: wrap;
-            }
-
-            .nav-tab {
-                padding: 16px 20px;
-                font-size: 0.9rem;
-            }
-
-            .section-header {
-                padding: 20px 24px;
-            }
-
-            .section-content {
-                padding: 24px;
-            }
-        }
-    </style>
-<style>img { outline: 1px solid rgba(0,0,0,.05); }</style></head>
-<body><section data-origin="pre-doctype-fragment"><div class="container">
-<div class="header">
-<h1>Database Designer Study</h1>
-<p>Project Charter - Managing IT Projects Course</p>
-</div>
-<nav class="nav-tabs">
-<button class="nav-tab active" data-target="student-info">Overview</button>
-<button class="nav-tab" data-target="project-title">Project Info</button>
-<button class="nav-tab" data-target="scope">Scope</button>
-<button class="nav-tab" data-target="stakeholders">Stakeholders</button>
-<button class="nav-tab" data-target="deliverables">Deliverables</button>
-<button class="nav-tab" data-target="methodology">Methodology</button>
-</nav>
-<div class="content">
-<div class="student-info" id="student-info">
-<h3>Student Information</h3>
-<div class="info-grid">
-<div class="info-item">
-<div class="info-label">Student Name</div>
-<div class="info-value">David Montes</div>
-</div>
-<div class="info-item">
-<div class="info-label">Course</div>
-<div class="info-value">Managing IT Projects</div>
-</div>
-<div class="info-item">
-<div class="info-label">Semester</div>
-<div class="info-value">Spring 2025</div>
-</div>
-</div>
-</div>
-<div class="section" id="project-title">
-<div class="section-header" data-toggle="section">
-<h2 class="section-title">
-<span class="section-icon">🔽</span>
-                        1. Project Title &amp; Description
-                    </h2>
-</div>
-<div class="section-content">
-<div class="instructions">
-<strong>Instructions:</strong>
-                        Replace the placeholder below with your specific project information. Include a clear project name and 2-3 sentences describing what you will deliver.
-                    </div>
-<div class="placeholder">
-<h3>Project Title: Database Designer Study</h3>
-<p>The project I am pursuing for the semester is to increase my confidence levels in my skills for my career. I chose this because I do not have any direct work experience working in my chosen career, and would like to have a clear understanding of what skills I would require and what I need to do in the career. This study will develop my understanding and skills needed for my career choice and will deliver a satisfactory resume and LinkedIn profile.</p>
-</div>
-</div>
-</div>
-<div class="section">
-<div class="section-header" data-toggle="section">
-<h2 class="section-title">
-<span class="section-icon">🔽</span>
-                        2. Vision, Mission &amp; Strategy Alignment
-                    </h2>
-</div>
-<div class="section-content">
-<div class="instructions">
-<strong>Instructions:</strong>
-                        Explain how this project aligns with your personal mission, vision, and strategic goals. Reference your previous mission/vision/strategy work.
-                    </div>
-<div class="placeholder">
-<h4>Personal Mission Connection:</h4>
-<p>This project supports my personal mission to have a work and impact that I am committed to, that I find interesting, and that provides value to help people. The values this project reflects are to help others and to provide meaningful value.</p>
-<h4>Vision Alignment:</h4>
-<p>Completing this project moves me towards my long-term vision for my career as it enhances my skills and ability to provide value and help others. This project is related to a career that I find interesting and aligns with my long-term vision of working towards a career that I find interesting.</p>
-<h4>Strategic Goal Support:</h4>
-<p>The strategic goals of this project enhance my ability to develop my skills further, whether it is for a goal in the near future, like getting ready to get into the job market, or enhancing my skills further to go deeper into my career path. Increasing my confidence in my skills and understanding now enhances my ability to improve and learn in the future.</p>
-</div>
-</div>
-</div>
-<div class="section">
-<div class="section-header" data-toggle="section">
-<h2 class="section-title">
-<span class="section-icon">🔽</span>
-                        3. Business Case &amp; Justification
-                    </h2>
-</div>
-<div class="section-content">
-<div class="instructions">
-<strong>Instructions:</strong>
-                        Describe how this project will add value to you, either professionally or personally. What benefits will you gain?
-                    </div>
-<div class="placeholder">
-<h4>Professional Value:</h4>
-<p>This project will benefit my career by enhancing my skills related to database design, understanding expectations as a database designer, having networking opportunities, and improving my resume and LinkedIn profile.</p>
-<h4>Personal Value:</h4>
-<p>This project will provide personal satisfaction, a confidence boost, and increased problem-solving and planning skills.</p>
-<h4>Learning Outcomes:</h4>
-<p>I will learn some technical skills related to my career, resume building, project management experience, and industry knowledge.</p>
-</div>
-</div>
-</div>
-<div class="section" id="scope">
-<div class="section-header" data-toggle="section">
-<h2 class="section-title">
-<span class="section-icon">🔽</span>
-                        4. High-Level Scope
-                    </h2>
-</div>
-<div class="section-content">
-<div class="completed-work">
-<div class="completed-header">Use Your Previous Scope Assignment</div>
-<p>Copy and paste your scope document content from your previous assignment into the placeholders below.</p>
-</div>
-<div class="scope-grid">
-<div class="scope-card in-scope">
-<h4>✅ In Scope for Semester Project</h4>
-<div class="placeholder">
-<ul>
-<li>To understand career requirements in terms of skills and experience</li>
-<li>To understand where my skills currently are in relation to these requirements.</li>
-<li>Research what tools and resources I can use to meet these requirements.</li>
-<li>Develop my skills that are required for my career to meet their requirements.</li>
-<li>Display the progress of the project to showcase the growth that has occurred over the project.</li>
-<li>Reflect on the progress of the project's conclusion.</li>
-</ul>
-</div>
-</div>
-<div class="scope-card roadmap">
-<h4>🗺️ Roadmap Items (≤6 Months)</h4>
-<div class="placeholder">
-<ul>
-<li>To get an internship related to my career.</li>
-<li>Earn more certifications related to my career.</li>
-<li>To understand not only the skills needed for my career now but also how to develop them further for my future career path (example: start as a database designer but work towards database administration)</li>
-<li>Research different career paths from where I want to start my career, as there may be unexpected paths.</li>
-</ul>
-</div>
-</div>
-<div class="scope-card out-scope">
-<h4>❌ Out of Scope</h4>
-<div class="placeholder">
-<ul>
-<li>To get a job. (This could contribute towards my goal, but it contradicts it in the sense that I feel unprepared for a job. While this could work, it is risky as I would not want to underperform.</li>
-<li>Get all the work experience required for a high-level career. (This is not possible in the time frame and is too long-term.).</li>
-<li>Get all relevant certifications and get every skill that could possibly have any relevance to my career. (My goal is focused on what will generally be required. My skill set just needs to be general enough to get started in my career and not know everything about it.</li>
-<li>Knowing any large-scale enterprise-level skills. (While knowing how to work for a large business scale is important, my goal is to just understand the job description's skills, which can be scaled up as I gain work experience and not through this project.).</li>
-</ul>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="section" id="stakeholders">
-<div class="section-header" data-toggle="section">
-<h2 class="section-title">
-<span class="section-icon">🔽</span>
-                        5. Stakeholder Register
-                    </h2>
-</div>
-<div class="section-content">
-<div class="completed-work">
-<div class="completed-header">Use Your Previous Stakeholder Assignment</div>
-<p>Copy and paste your stakeholder information from your previous assignment. Include both the table and your power-interest grid.</p>
-</div>
-<table class="stakeholder-table">
-<thead>
-<tr>
-<th>Stakeholder</th>
-<th>Category</th>
-<th>Role/Interest</th>
-<th>Power</th>
-<th>Interest</th>
-<th>Engagement Strategy</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Myself</td>
-<td>Internal</td>
-<td>Manage Closely</td>
-<td>High</td>
-<td>High</td>
-<td>Have weekly reviews and progress reports for the project to see if deliverables are being met.</td>
-</tr>
-<tr>
-<td>Professor Espinoza</td>
-<td>Internal</td>
-<td>Manage Closely</td>
-<td>High</td>
-<td>High</td>
-<td>Have detailed logs or reports on the current progress of the project and ask for input bimonthly. Ask for assistance with any issues that may arise.</td>
-</tr>
-<tr>
-<td>Interviewed Professionals</td>
-<td>Internal</td>
-<td>Keep Satisfied</td>
-<td>High</td>
-<td>Low</td>
-<td>Consult for any extra necessary questions if needed.</td>
-</tr>
-<tr>
-<td>Classmates</td>
-<td>Internal</td>
-<td>Keep Informed</td>
-<td>Low</td>
-<td>High</td>
-<td>Share progress of the project and get input for deliverables that are being met.</td>
-</tr>
-<tr>
-<td>Future Employers</td>
-<td>External</td>
-<td>Keep Satisfied</td>
-<td>High</td>
-<td>Low</td>
-<td>Make sure requirements are being met to match what future employers may need.</td>
-</tr>
-<tr>
-<td>Family Members</td>
-<td>External</td>
-<td>Monitor</td>
-<td>Low</td>
-<td>Low</td>
-<td>Generally, let them know how progress on the project is occasionally and ask for input on certain aspects of the project if they can assist with them.</td>
-</tr>
-<tr>
-<td>Professors</td>
-<td>External</td>
-<td>Monitor</td>
-<td>Low</td>
-<td>Low</td>
-<td>Ask for assistance with meeting deliverables and any issues that may arise.</td>
-</tr>
-<tr>
-<td>CPPA</td>
-<td>External</td>
-<td>Keep Satisfied</td>
-<td>High</td>
-<td>Low</td>
-<td>Have an understanding of what regulations the CPPA might need during the project.</td>
-</tr>
-</tbody>
-</table>
-<div class="power-interest-grid">
-<h4>Power-Interest Grid Visualization</h4>
-<div class="grid-placeholder">
-<img alt="A power-interest grid showing stakeholders categorized by their level of power and interest." src="Power-Interest-Grid-Visualization.PNG"/>
-</div>
-</div>
-</div>
-</div>
-<div class="section" id="deliverables">
-<div class="section-header" data-toggle="section">
-<h2 class="section-title">
-<span class="section-icon">🔽</span>
-                        6. Deliverables
-                    </h2>
-</div>
-<div class="section-content">
-<table class="stakeholder-table">
-<thead>
-<tr>
-<th>Deliverable Name</th>
-<th>Type</th>
-<th>Smart Description</th>
-<th>Definition of Done</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Skill identification/research</td>
-<td>Intangible</td>
-<td>Identify and research skills needed for career, interview people in career, and complete by October 3rd.</td>
-<td>
-<ul>
-<li>Word document containing research (At least 3 pages)</li>
-<li>Notes of interviewed people(1 or 2)</li>
-<li>At least 2 page analysis of interviews and research</li>
-</ul>
-</td>
-</tr>
-<tr>
-<td>Learn other required skills from research</td>
-<td>Intangible</td>
-<td>Ensure that I understand at least 10 skills well and learn at least 3 new skills by October 10th.</td>
-<td>
-<ul>
-<li>Document sources used to learn skills</li>
-<li>Learn at least 3 skills</li>
-<li>Update (or learn) understanding of 10 skills</li>
-</ul>
-</td>
-</tr>
-<tr>
-<td>Certifications</td>
-<td>Tangible</td>
-<td>Obtain Oracle Database Certifications (Free) by October 24th</td>
-<td>
-<ul>
-<li>Complete 1-6 free Oracle Database Trainings</li>
-<li>Complete 1-6 free Oracle Database Certifications</li>
-</ul>
-</td>
-</tr>
-<tr>
-<td>Career Qualifications: Elevator pitch, LinkedIn and Resume</td>
-<td>Tangible</td>
-<td>Update elevator pitch, LinkedIn and resume with new skills by October 31st</td>
-<td>
-<ul>
-<li>Update Resume</li>
-<li>Update LinkedIn profile</li>
-<li>Update elevator pitch</li>
-</ul>
-</td>
-</tr>
-<tr>
-<td>Website</td>
-<td>Tangible</td>
-<td>Create website to showcase progress and completion of project by November 7th</td>
-<td>
-<ul>
-<li>Have good presentation with UI</li>
-<li>Have all information needed with several tabs</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="section">
-<div class="section-header" data-toggle="section">
-<h2 class="section-title">
-<span class="section-icon">🔽</span>
-                        7. Budget Estimation
-                    </h2>
-</div>
-<div class="section-content">
-<div class="grid-placeholder">
-<img alt="A spreadsheet showing a project budget with labor, equipment/software, materials, and services costs." src="Project-Budget.PNG"/>
-</div>
-</div>
-</div>
-<div class="section" id="methodology">
-<div class="section-header" data-toggle="section">
-<h2 class="section-title">
-<span class="section-icon">🔽</span>
-                        8. Project Methodology
-                    </h2>
-</div>
-<div class="section-content">
-<div class="placeholder">
-<p>I believe that after looking at all the methodologies, the one that best fits my project is the Agile methodology. My main reason is that the project mirrors the factors of an agile methodology with a high level of uncertainty and volatility that is likely to change throughout the project's progression. There are requirements that I planned and would like to meet, but those requirements have been flexible even in past planning. I was heavily considering hybrid-incremental or hybrid-iterative, but the issue is that I realized that I needed not only to refine and improve my deliverables, but also to add new goals within those deliverables as the project progresses, which would best fit an Agile method. My WBS also heavily reflects the rapid iterations and continuous adaptation of my project.</p>
-<img alt="Agile Methodology Flowchart" src="methodology-diagram.png"/>
-</div>
-</div>
-</div>
-<div class="section">
-<div class="section-header" data-toggle="section">
-<h2 class="section-title">
-<span class="section-icon">🔽</span>
-                        9. Project Tool Selection
-                    </h2>
-</div>
-<div class="section-content">
-<div class="placeholder">
-<p>I tried Microsoft Project, Jira, and Trello. I ultimately chose Jira. This is because it was one of the tools that fit my methodology and fit my needs the most. The board was the feature I liked a lot, so that was one of the main parts I liked about not only Jira but Trello as well. Trello, unfortunately, while very clean, is too simple without paying for more features. Being able to add apps to increase features like Microsoft 365 or a calendar feature was nice. There was also a timeline showing when tasks needed to be done. There is a page section that could also be useful to have information. Trello and Jira were both free, and Microsoft Project, I have access to as a student, so I wouldn't have to pay for any of them, but Jira and Trello both have features locked behind paywalls, with Trello having more locked than Jira, as someone working on their own. This helped me pick Jira.</p>
-<img alt="Jira example" src="Tool-Example.png"/>
-</div>
-</div>
-</div>
-<div class="section">
-<div class="section-header" data-toggle="section">
-<h2 class="section-title">
-<span class="section-icon">🔽</span>
-                        Additional Charter Components
-                    </h2>
-</div>
-<div class="section-content">
-<div class="instructions">
-<strong>Note for Future Updates:</strong>
-                        This charter will be expanded throughout the semester as we cover additional project management components including:
-                        <ul>
-<li>Project Methodology Selection</li>
-<li>Deliverables &amp; Definition of Done</li>
-<li>High-Level Timeline &amp; Milestones</li>
-<li>Execution Plan Overview</li>
-<li>Risk Register</li>
-<li>Acceptance Criteria</li>
-<li>Project Manager Authority &amp; Approvals</li>
-</ul>
-                        Keep this HTML file - you'll be adding to it as the semester progresses!
-                    </div>
-</div>
-</div>
-</div>
-</div><button class="expand-all" id="toggleAllBtn">📚 Collapse All Sections</button><script>
-        // Define scroll functions first to avoid reference errors
-        function scrollToTopAnimated() {
-            const scrollToTop = () => {
-                const c = document.documentElement.scrollTop || document.body.scrollTop;
-                if (c > 0) {
-                    window.requestAnimationFrame(scrollToTop);
-                    window.scrollTo(0, c - c / 8);
-                }
-            };
-            scrollToTop();
-            
-            // Add button feedback
-            const button = document.getElementById('scrollToTop');
-            if (button) {
-                button.style.transform = 'scale(0.9)';
-                setTimeout(() => {
-                    button.style.transform = '';
-                }, 150);
-            }
-        }
-
-        // Scroll to top (simple version for compatibility)
-        function scrollToTop() {
-            scrollToTopAnimated();
-        }
-
-        // Create floating particles
-        function createParticles() {
-            const container = document.getElementById('particles');
-            const particleCount = 15;
-            
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.width = Math.random() * 4 + 2 + 'px';
-                particle.style.height = particle.style.width;
-                particle.style.animationDelay = Math.random() * 20 + 's';
-                particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
-                container.appendChild(particle);
-            }
-        }
-
-        // Update scroll progress and show/hide scroll button
-        function updateReadingProgress() {
-            const winHeight = window.innerHeight;
-            const docHeight = document.documentElement.scrollHeight - winHeight;
-            const scrollTop = window.pageYOffset;
-            const scrollPercent = (scrollTop / docHeight) * 100;
-            
-            // Update reading progress bar
-            const progressBar = document.getElementById('reading-progress');
-            if (progressBar) {
-                progressBar.style.width = scrollPercent + '%';
-            }
-            
-            // Update scroll button visibility and progress ring
-            const scrollButton = document.getElementById('scrollToTop');
-            const progressCircle = document.getElementById('progress-circle');
-            
-            if (scrollButton) {
-                if (scrollTop > 300) { // Show after scrolling 300px
-                    scrollButton.classList.add('visible');
-                } else {
-                    scrollButton.classList.remove('visible');
-                }
-            }
-            
-            // Update progress ring
-            if (progressCircle) {
-                const circumference = 2 * Math.PI * 33; // 207.35
-                const strokeDashoffset = circumference - (scrollPercent / 100) * circumference;
-                progressCircle.style.strokeDashoffset = strokeDashoffset;
-            }
-        }
-
-        // Theme toggle
-        function toggleTheme() {
-            const body = document.body;
-            const themeButton = document.querySelector('.theme-toggle');
-            
-            body.classList.toggle('dark');
-            themeButton.textContent = body.classList.contains('dark') ? '☀️' : '🌙';
-            
-            // Store theme preference
-            localStorage.setItem('theme', body.classList.contains('dark') ? 'dark' : 'light');
-        }
-
-        // Load saved theme
-        function loadTheme() {
-            const savedTheme = localStorage.getItem('theme');
-            const themeButton = document.querySelector('.theme-toggle');
-            
-            if (savedTheme === 'dark') {
-                document.body.classList.add('dark');
-                themeButton.textContent = '☀️';
-            }
-        }
-
-        // Print page
-        function printPage() {
-            // Temporarily expand all sections for printing
-            const sections = document.querySelectorAll('.section');
-            const wasCollapsed = [];
-            
-            sections.forEach((section, index) => {
-                wasCollapsed[index] = section.classList.contains('collapsed');
-                section.classList.remove('collapsed');
-            });
-            
-            setTimeout(() => {
-                window.print();
-                
-                // Restore collapsed state after printing
-                setTimeout(() => {
-                    sections.forEach((section, index) => {
-                        if (wasCollapsed[index]) {
-                            section.classList.add('collapsed');
-                        }
-                    });
-                }, 100);
-            }, 100);
-        }
-
-        // Share project
-        function shareProject() {
-            if (navigator.share) {
-                navigator.share({
-                    title: 'Database Designer Study - Project Charter',
-                    text: 'Check out my Database Designer Study project charter for Managing IT Projects course.',
-                    url: window.location.href
-                });
-            } else {
-                // Fallback: copy to clipboard
-                const url = window.location.href;
-                navigator.clipboard.writeText(url).then(() => {
-                    const button = event.target;
-                    const originalText = button.textContent;
-                    button.textContent = '✅';
-                    button.style.background = '#22c55e';
-                    
-                    setTimeout(() => {
-                        button.textContent = originalText;
-                        button.style.background = '';
-                    }, 2000);
-                });
-            }
-        }
-
-        function toggleSection(header) {
-            const section = header.parentElement;
-            const icon = header.querySelector('.section-icon');
-            
-            section.classList.toggle('collapsed');
-            
-            // Add ripple effect
-            const ripple = document.createElement('div');
-            ripple.style.position = 'absolute';
-            ripple.style.borderRadius = '50%';
-            ripple.style.background = 'rgba(99, 102, 241, 0.3)';
-            ripple.style.transform = 'scale(0)';
-            ripple.style.animation = 'ripple 0.6s linear';
-            ripple.style.left = '50%';
-            ripple.style.top = '50%';
-            ripple.style.width = '20px';
-            ripple.style.height = '20px';
-            ripple.style.marginLeft = '-10px';
-            ripple.style.marginTop = '-10px';
-            
-            header.appendChild(ripple);
-            
-            setTimeout(() => {
-                ripple.remove();
-            }, 600);
-            
-            // Smooth scroll animation
-            if (!section.classList.contains('collapsed')) {
-                const content = section.querySelector('.section-content');
-                content.style.maxHeight = content.scrollHeight + 'px';
-            }
-        }
-
-        function toggleAllSections() {
-            const sections = document.querySelectorAll('.section');
-            const button = event.target;
-            const isAnyExpanded = Array.from(sections).some(section => !section.classList.contains('collapsed'));
-            
-            // Add button animation
-            button.style.transform = 'scale(0.95)';
-            setTimeout(() => {
-                button.style.transform = '';
-            }, 150);
-            
-            sections.forEach((section, index) => {
-                setTimeout(() => {
-                    if (isAnyExpanded) {
-                        section.classList.add('collapsed');
-                    } else {
-                        section.classList.remove('collapsed');
-                    }
-                }, index * 50); // Stagger the animation
-            });
-            
-            // Update button text with animation
-            setTimeout(() => {
-                button.innerHTML = isAnyExpanded ? '📖 Expand All Sections' : '📚 Collapse All Sections';
-            }, 300);
-        }
-
-        function scrollToSection(id, buttonElement) {
-            const element = document.getElementById(id);
-            if (element) {
-                element.scrollIntoView({ 
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-                
-                // Update active tab with animation
-                document.querySelectorAll('.nav-tab').forEach(tab => {
-                    tab.classList.remove('active');
-                    tab.style.transform = 'scale(0.95)';
-                    setTimeout(() => {
-                        tab.style.transform = '';
-                    }, 150);
-                });
-                
-                if (buttonElement) {
-                    buttonElement.classList.add('active');
-                    buttonElement.style.transform = 'scale(1.05)';
-                    setTimeout(() => {
-                        buttonElement.style.transform = '';
-                    }, 150);
-                }
-            }
-        }
-
-        // Enhanced scroll effects
-        window.addEventListener('scroll', () => {
-            updateReadingProgress();
-            
-            // Parallax effect for header
-            const scrolled = window.pageYOffset;
-            const header = document.querySelector('.header');
-            if (header) {
-                header.style.transform = `translateY(${scrolled * 0.5}px)`;
-            }
-            
-            // Update navigation
-            const sections = ['student-info', 'project-title', 'scope', 'stakeholders', 'deliverables', 'methodology'];
-            const navTabs = document.querySelectorAll('.nav-tab');
-            
-            sections.forEach((sectionId, index) => {
-                const section = document.getElementById(sectionId);
-                if (section) {
-                    const rect = section.getBoundingClientRect();
-                    if (rect.top <= 100 && rect.bottom >= 100) {
-                        navTabs.forEach(tab => tab.classList.remove('active'));
-                        if (navTabs[index]) {
-                            navTabs[index].classList.add('active');
-                        }
-                    }
-                }
-            });
-
-            // Animate elements on scroll
-            const elements = document.querySelectorAll('.section, .info-item, .scope-card');
-            elements.forEach(element => {
-                const elementTop = element.getBoundingClientRect().top;
-                const elementVisible = 150;
-                
-                if (elementTop < window.innerHeight - elementVisible) {
-                    element.style.opacity = '1';
-                    element.style.transform = 'translateY(0)';
-                }
-            });
-        });
-
-        // Set up all event listeners
-        function setupEventListeners() {
-            // Scroll to top buttons
-            const scrollTopBtn = document.getElementById('scrollToTop');
-            const floatingScrollBtn = document.getElementById('floatingScrollTop');
-            
-            if (scrollTopBtn) {
-                scrollTopBtn.addEventListener('click', scrollToTopAnimated);
-            }
-            if (floatingScrollBtn) {
-                floatingScrollBtn.addEventListener('click', scrollToTopAnimated);
-            }
-            
-            // Theme toggle
-            const themeBtn = document.getElementById('themeToggle');
-            if (themeBtn) {
-                themeBtn.addEventListener('click', toggleTheme);
-            }
-            
-            // Print and share buttons
-            const printBtn = document.getElementById('printBtn');
-            const shareBtn = document.getElementById('shareBtn');
-            
-            if (printBtn) {
-                printBtn.addEventListener('click', printPage);
-            }
-            if (shareBtn) {
-                shareBtn.addEventListener('click', shareProject);
-            }
-            
-            // Toggle all sections button
-            const toggleAllBtn = document.getElementById('toggleAllBtn');
-            if (toggleAllBtn) {
-                toggleAllBtn.addEventListener('click', toggleAllSections);
-            }
-            
-            // Navigation tabs
-            const navTabs = document.querySelectorAll('.nav-tab');
-            navTabs.forEach(tab => {
-                tab.addEventListener('click', (e) => {
-                    const targetId = e.target.getAttribute('data-target');
-                    if (targetId) {
-                        scrollToSection(targetId, e.target);
-                    }
-                });
-            });
-            
-            // Section headers (collapsible)
-            const sectionHeaders = document.querySelectorAll('[data-toggle="section"]');
-            sectionHeaders.forEach(header => {
-                header.addEventListener('click', () => {
-                    toggleSection(header);
-                });
-            });
-        }
-
-        // Initialize everything when DOM loads
-        document.addEventListener('DOMContentLoaded', () => {
-            createParticles();
-            loadTheme();
-            
-            // Set up all event listeners
-            setupEventListeners();
-            
-            // Add ripple animation keyframes
-            const style = document.createElement('style');
-            style.textContent = `
-                @keyframes ripple {
-                    to {
-                        transform: scale(4);
-                        opacity: 0;
-                    }
-                }
-                
-                @keyframes pulse {
-                    0%, 100% { transform: scale(1); }
-                    50% { transform: scale(1.05); }
-                }
-                
-                .pulse {
-                    animation: pulse 2s infinite;
-                }
-            `;
-            document.head.appendChild(style);
-            
-            // Initialize with first section expanded and add stagger animation
-            const sections = document.querySelectorAll('.section');
-            sections.forEach((section, index) => {
-                if (index > 0) {
-                    section.classList.add('collapsed');
-                }
-                
-                // Add intersection observer for animations
-                const observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            entry.target.style.opacity = '1';
-                            entry.target.style.transform = 'translateY(0)';
-                        }
-                    });
-                }, {
-                    threshold: 0.1,
-                    rootMargin: '0px 0px -50px 0px'
-                });
-                
-                observer.observe(section);
-            });
-            
-            // Add hover sound effects (optional - can be disabled)
-            const addHoverEffects = () => {
-                document.querySelectorAll('.section-header, .nav-tab, .floating-action').forEach(element => {
-                    element.addEventListener('mouseenter', () => {
-                        element.style.transform = element.style.transform || '';
-                        element.style.transform += ' scale(1.02)';
-                    });
-                    
-                    element.addEventListener('mouseleave', () => {
-                        element.style.transform = element.style.transform.replace(' scale(1.02)', '');
-                    });
-                });
-            };
-            
-            addHoverEffects();
-            
-            // Add typing effect to title (optional)
-            const title = document.querySelector('.header h1');
-            if (title) {
-                const text = title.textContent;
-                title.textContent = '';
-                let index = 0;
-                
-                const typeWriter = () => {
-                    if (index < text.length) {
-                        title.textContent += text.charAt(index);
-                        index++;
-                        setTimeout(typeWriter, 100);
-                    }
-                };
-                
-                // Start typing effect after a delay
-                setTimeout(typeWriter, 500);
-            }
-        });
-
-        // Add keyboard navigation
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                // Close all sections
-                document.querySelectorAll('.section').forEach(section => {
-                    section.classList.add('collapsed');
-                });
-            } else if (e.ctrlKey && e.key === 'p') {
-                e.preventDefault();
-                printPage();
-            } else if (e.key === 'Home' && e.ctrlKey) {
-                e.preventDefault();
-                scrollToTopAnimated();
-            }
-        });
-    </script></section>
-<div class="background-animation" id="particles"></div>
-<div class="reading-progress" id="reading-progress"></div>
-<button class="scroll-to-top" id="scrollToTop" title="Back to Top">
-<svg class="scroll-progress-ring" height="68" width="68">
-<circle cx="34" cy="34" id="progress-circle" r="33"></circle>
-</svg>
-        ↑
-    </button>
-<button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">🌙</button>
-<div class="floating-menu">
-<button class="floating-action" id="floatingScrollTop" title="Back to Top">↑</button>
-<button class="floating-action" id="printBtn" title="Print Page">🖨️</button>
-<button class="floating-action" id="shareBtn" title="Share Project">📤</button>
-</div></body></html>
+  <meta charset="UTF-8" />
+  <title>Preparing for an Entry-Level IT Job – Project Closure</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg-body: #f3f4f8;
+      --bg-card: #ffffff;
+      --bg-header: #111827;
+      --bg-accent: #e5e7eb;
+      --primary: #1d4ed8;
+      --primary-dark: #1e40af;
+      --text-main: #111827;
+      --text-muted: #6b7280;
+      --border-subtle: #e5e7eb;
+      --radius-card: 14px;
+      --shadow-soft: 0 14px 30px rgba(15, 23, 42, 0.08);
+      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji",
+        "Segoe UI Emoji", "Segoe UI Symbol";
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-sans);
+    }
+
+    body {
+      background: radial-gradient(circle at top left, #e5edff 0, #f3f4f8 40%, #f9fafb 100%);
+      color: var(--text-main);
+      line-height: 1.6;
+    }
+
+    /* HEADER & NAV */
+
+    header {
+      background: rgba(17, 24, 39, 0.96);
+      color: #fff;
+      padding: 18px 5% 16px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .header-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    header h1 {
+      margin-bottom: 2px;
+      font-size: 1.6rem;
+      letter-spacing: 0.01em;
+    }
+
+    header p {
+      font-size: 0.95rem;
+      opacity: 0.86;
+    }
+
+    nav {
+      margin-top: 4px;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #e5e7eb;
+      font-size: 0.85rem;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(249, 250, 251, 0.18);
+      background: rgba(15, 23, 42, 0.4);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.18s ease, color 0.18s ease, transform 0.12s ease,
+        box-shadow 0.18s ease;
+    }
+
+    nav a::before {
+      content: "●";
+      font-size: 0.55rem;
+      color: rgba(129, 140, 248, 0.9);
+    }
+
+    nav a:hover {
+      background: #f9fafb;
+      color: #111827;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.25);
+    }
+
+    /* LAYOUT */
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    main {
+      padding: 28px 5% 40px;
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    section {
+      margin-top: 12px;
+    }
+
+    .intro-card,
+    .section-card {
+      background: var(--bg-card);
+      padding: 22px 22px 20px;
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-soft);
+      margin-bottom: 24px;
+      border: 1px solid rgba(148, 163, 184, 0.16);
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .section-card h2,
+    .intro-card h2 {
+      font-size: 1.25rem;
+      color: #111827;
+    }
+
+    .section-meta {
+      font-size: 0.83rem;
+      color: var(--text-muted);
+    }
+
+    h3 {
+      font-size: 1rem;
+      margin-top: 16px;
+      margin-bottom: 6px;
+      color: #111827;
+    }
+
+    h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #111827;
+    }
+
+    p {
+      font-size: 0.95rem;
+      color: #111827;
+    }
+
+    ul {
+      padding-left: 18px;
+      margin-top: 8px;
+      font-size: 0.95rem;
+    }
+
+    ul li + li {
+      margin-top: 2px;
+    }
+
+    textarea,
+    input,
+    select {
+      width: 100%;
+      font-size: 0.94rem;
+    }
+
+    textarea {
+      min-height: 120px;
+      padding: 9px 10px;
+      border-radius: 8px;
+      border: 1px solid #d1d5db;
+      resize: vertical;
+      margin: 6px 0 14px;
+      background: #f9fafb;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease,
+        background 0.15s ease;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.4);
+      background: #ffffff;
+    }
+
+    input[type="text"],
+    select {
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid #d1d5db;
+      margin: 6px 0 14px;
+      background: #f9fafb;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease,
+        background 0.15s ease;
+    }
+
+    input[type="text"]:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.4);
+      background: #ffffff;
+    }
+
+    label {
+      font-size: 0.85rem;
+      color: #374151;
+    }
+
+    /* STAR STORIES DISPLAY */
+
+    .star-story {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(209, 213, 219, 0.9);
+    }
+
+    .star-story:first-of-type {
+      border-top: none;
+      padding-top: 0;
+    }
+
+    .star-story p {
+      margin-bottom: 6px;
+    }
+
+    .star-story p strong {
+      font-weight: 600;
+    }
+
+    /* BUTTON */
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 14px;
+      padding: 9px 16px;
+      border-radius: 999px;
+      border: none;
+      background: var(--primary);
+      color: #fff;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background 0.15s ease, transform 0.1s ease,
+        box-shadow 0.15s ease;
+      box-shadow: 0 10px 18px rgba(37, 99, 235, 0.35);
+    }
+
+    .btn-primary::before {
+      content: "▶";
+      font-size: 0.8rem;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 14px 24px rgba(37, 99, 235, 0.45);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+      box-shadow: 0 8px 14px rgba(37, 99, 235, 0.35);
+    }
+
+    /* MODAL */
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.75);
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      padding: 16px;
+    }
+
+    .modal-content {
+      background: #f9fafb;
+      padding: 18px 18px 16px;
+      border-radius: 14px;
+      max-width: 720px;
+      width: 100%;
+      position: relative;
+      box-shadow: 0 24px 60px rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      font-size: 1.4rem;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      color: #6b7280;
+      padding: 2px 4px;
+      border-radius: 999px;
+      transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease;
+    }
+
+    .modal-close:hover {
+      color: #111827;
+      background: rgba(209, 213, 219, 0.6);
+      transform: scale(1.02);
+    }
+
+    .modal-video {
+      margin-top: 10px;
+      width: 100%;
+      border-radius: 10px;
+      background: #000;
+    }
+
+    /* CLOSURE BLOCKS (COLLAPSIBLE) */
+
+    .closure-block {
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      margin: 10px 0 14px;
+      background: #f9fafb;
+      overflow: hidden;
+    }
+
+    .closure-block summary {
+      cursor: pointer;
+      font-weight: 600;
+      padding: 9px 12px;
+      list-style: none;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #111827;
+      background: linear-gradient(
+        90deg,
+        rgba(209, 213, 219, 0.35),
+        rgba(243, 244, 246, 0.9)
+      );
+    }
+
+    .closure-block summary::marker,
+    .closure-block summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .closure-block summary::before {
+      content: "▸";
+      font-size: 0.9rem;
+      color: #4b5563;
+      transition: transform 0.15s ease;
+    }
+
+    .closure-block[open] summary::before {
+      transform: rotate(90deg);
+    }
+
+    .closure-block-content {
+      padding: 10px 12px 12px;
+      border-top: 1px solid var(--border-subtle);
+      background: #ffffff;
+    }
+
+    /* TABLES */
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 6px 0 14px;
+      font-size: 0.9rem;
+      background: #ffffff;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    thead {
+      background: #f3f4f6;
+    }
+
+    th,
+    td {
+      border: 1px solid #e5e7eb;
+      padding: 6px 8px;
+      vertical-align: top;
+    }
+
+    th {
+      text-align: left;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: #4b5563;
+      background: #f3f4f6;
+    }
+
+    tbody tr:nth-child(even) {
+      background: #f9fafb;
+    }
+
+    tbody tr:hover {
+      background: #eef2ff;
+    }
+
+    td[contenteditable="true"] {
+      background: #f9fafb;
+      cursor: text;
+    }
+
+    td[contenteditable="true"]:focus {
+      outline: 2px solid rgba(59, 130, 246, 0.7);
+      outline-offset: -2px;
+      background: #ffffff;
+    }
+
+    /* FOOTER */
+
+    footer {
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      padding: 18px 5% 26px;
+      border-top: 1px solid rgba(156, 163, 175, 0.3);
+      margin-top: 10px;
+    }
+
+    footer span {
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* RESPONSIVE */
+
+    @media (max-width: 640px) {
+      header h1 {
+        font-size: 1.3rem;
+      }
+
+      .intro-card,
+      .section-card {
+        padding: 18px 16px 16px;
+      }
+
+      nav ul {
+        gap: 6px;
+      }
+
+      nav a {
+        font-size: 0.8rem;
+        padding: 5px 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <div>
+        <h1>Preparing for an Entry-Level IT Job – Project Closure</h1>
+        <p>Closing out my journey toward an entry-level IT / data role.</p>
+      </div>
+
+      <nav>
+        <ul>
+          <li><a href="#overview">Overview &amp; Closure</a></li>
+          <li><a href="#project-charter">Project Charter</a></li>
+          <li><a href="#star-stories">STAR Stories</a></li>
+          <li><a href="#bite-sized-stories">Bite-Sized Stories</a></li>
+          <li><a href="#project-closure-document">Closure Doc</a></li>
+          <li><a href="#peer-reviews">Peer Reviews</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- OVERVIEW SECTION -->
+    <section id="overview">
+      <div class="intro-card">
+        <div class="section-header">
+          <h2>Project Closure Overview</h2>
+          <div class="section-meta">
+            High-level summary of your semester-long IT / data project.
+          </div>
+        </div>
+
+        <p>
+          This site presents the closure for the
+          <strong>Preparing for an Entry-Level IT Job</strong> project.
+          It brings together the original project charter, STAR stories, a video-based bite-sized story,
+          and peer feedback.
+        </p>
+
+        <h3>Closure Snapshot</h3>
+        <ul>
+          <li>Explored IT pathways including database and help desk roles.</li>
+          <li>Completed online courses and strengthened technical skills.</li>
+          <li>Created a career website, resume, LinkedIn updates, and elevator pitch.</li>
+          <li>Submitted applications for Data Analyst and Data Entry roles.</li>
+          <li>Captured learning moments and reflections for future growth.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- PROJECT CHARTER SECTION -->
+    <section id="project-charter">
+      <div class="section-card">
+        <div class="section-header">
+          <h2>Project Charter</h2>
+          <div class="section-meta">Original direction, goals, scope, and deliverables.</div>
+        </div>
+
+        <p>
+          The project charter defined the direction for my preparation toward IT and database-related roles.
+          It focused on researching roles, developing skills, completing coursework, creating career tools,
+          conducting interviews, and submitting real job applications.
+        </p>
+
+        <h3>View Full Project Charter</h3>
+        <p>
+          <a href="https://davidm5222003-sudo.github.io/project-charter-ChatGPT-assisted/" target="_blank">
+            Open the full Project Charter website
+          </a>
+        </p>
+      </div>
+    </section>
+
+    <!-- STAR STORIES SECTION (NOW FORMATTED, NO TEXTAREAS) -->
+    <section id="star-stories">
+      <div class="section-card">
+        <div class="section-header">
+          <h2>STAR Stories</h2>
+          <div class="section-meta">Key project experiences using the STAR method.</div>
+        </div>
+
+        <div class="star-story">
+          <h3>STAR Story 1 — Skill Identification &amp; Career Research</h3>
+          <p><strong>Situation:</strong> At the beginning of my project, I was unsure which IT career path—database design or IT support—best aligned with my interests and skills. I needed a clear understanding of industry expectations so I could focus my learning and prepare for entry-level roles.</p>
+          <p><strong>Task:</strong> My goal was to research both fields, identify at least ten essential skills employers look for, and evaluate real job postings to understand responsibilities, skill gaps, and requirements.</p>
+          <p><strong>Action:</strong> I conducted structured research on database design and IT support roles, reviewing job descriptions, LinkedIn profiles, and professional articles. I documented responsibilities, tools, and required certifications. I created side-by-side skill comparisons and gathered over ten job postings to identify trends. I also summarized the skills I already had versus those I needed to learn.</p>
+          <p><strong>Result:</strong> I produced a complete research package, including a comparison of roles, required skills, and job expectations. This helped me narrow my direction, create realistic learning goals, and choose IT help desk and database roles as my primary starting points. This clarity guided every other part of my project and reduced uncertainty in my career planning.</p>
+        </div>
+
+        <div class="star-story">
+          <h3>STAR Story 2 — Learning New Required Skills</h3>
+          <p><strong>Situation:</strong> My research revealed that my SQL, data modeling, and troubleshooting skills were not yet strong enough to qualify for many entry-level IT or database roles. I needed to bridge these gaps quickly and efficiently.</p>
+          <p><strong>Task:</strong> I set a goal to learn at least three new skills and significantly improve my understanding of at least ten skills identified through career research.</p>
+          <p><strong>Action:</strong> I completed LinkedIn Learning and Alison database courses, took detailed notes, practiced SQL through exercises, and built small projects using real SQL statements, constraints, table design, and data analysis. I studied IT technician fundamentals such as networking basics, ticketing workflows, troubleshooting methods, and cybersecurity practices to prepare for IT support roles. I documented each resource and summarized what I learned.</p>
+          <p><strong>Result:</strong> By the end of the learning phase, I had mastered over ten technical skills and learned at least three new ones, including advanced SQL, troubleshooting methodology, and cloud computing fundamentals. I significantly improved my technical confidence and demonstrated measurable progress through completed coursework and hands-on practice.</p>
+        </div>
+
+        <div class="star-story">
+          <h3>STAR Story 3 — Completing Certifications (Alison Courses)</h3>
+          <p><strong>Situation:</strong> Many IT and database job postings listed certifications or formal training as a requirement or strong preference. I needed tangible proof of my skills to strengthen my resume and applications.</p>
+          <p><strong>Task:</strong> My goal was to complete multiple free Alison certifications related to database concepts and IT technician skills by the project deadline.</p>
+          <p><strong>Action:</strong> I enrolled in two Alison courses: <em>Introduction to Database Concepts</em> and <em>Essentials of Information Technology Technician Skills</em>. I completed all modules, quizzes, and final assessments. I took screenshots of progress, documented key concepts (such as SQL structure, cloud computing, disaster recovery, and networking basics), and aligned each certification to the job skills I researched earlier.</p>
+          <p><strong>Result:</strong> I earned two certifications with passing scores (80% and 88%), giving me tangible credentials to list on my resume and LinkedIn profile. These certifications strengthened my portfolio and demonstrated initiative, follow-through, and professional development—qualities employers value in entry-level candidates.</p>
+        </div>
+
+        <div class="star-story">
+          <h3>STAR Story 4 — Creating My Career Tools &amp; Progress Website</h3>
+          <p><strong>Situation:</strong> Before this project, my resume, LinkedIn profile, and professional branding were outdated and didn’t reflect my new IT and database skills. I needed a cohesive professional presentation to appeal to employers.</p>
+          <p><strong>Task:</strong> I set a goal to redesign my resume, rewrite my LinkedIn profile, create an elevator pitch, and develop a professional website showcasing my progress and qualifications.</p>
+          <p><strong>Action:</strong> I updated my resume with new technical skills, certifications, and project experience. I rewrote my LinkedIn headline, About section, and skills, and added new coursework and accomplishments. I wrote a clear elevator pitch and built a six-section website documenting my research, learning, certifications, interviews, and applications. I included screenshots, explanations, and real progress indicators.</p>
+          <p><strong>Result:</strong> I created a complete professional toolkit ready for employers. My resume is targeted and polished, my LinkedIn profile is aligned with my skills and goals, and my website provides an in-depth look at my qualifications. These improvements significantly enhanced my professional presence and prepared me for job applications and networking.</p>
+        </div>
+
+        <div class="star-story">
+          <h3>STAR Story 5 — Applying for Entry-Level Data-Focused Roles</h3>
+          <p><strong>Situation:</strong> Toward the end of my project, one of my goals was to begin applying for real entry-level IT or data roles. However, I faced challenges: many positions were too far away, required experience I did not yet have, or had technical requirements beyond my current skill level. Despite these obstacles, I still needed to complete the application deliverable with roles that realistically matched my abilities and geographic range.</p>
+          <p><strong>Task:</strong> My objective was to find legitimate, attainable job opportunities and submit professional, targeted applications—even if the number of suitable openings was limited. I aimed to demonstrate readiness by completing at least two strong applications aligned with my developing data skills.</p>
+          <p><strong>Action:</strong> I carefully reviewed many job postings and identified two realistic roles that matched both my skill set and location constraints:
+            <br>1. A Data Entry Assistant position emphasizing accuracy, typing speed, and attention to detail.
+            <br>2. A Data Analyst role at East West Bank, which aligned with my SQL practice and interest in analytics.
+            I tailored my resume and cover letter for each role, completed typing tests, and documented the application submissions with confirmation screenshots.</p>
+          <p><strong>Result:</strong> Despite a limited pool of roles that met my criteria, I successfully submitted two high-quality applications aligned with my skills and career direction. Completing these applications strengthened my job-search confidence, demonstrated professional readiness, and clarified the expectations of data-focused roles. This experience also highlighted areas for continued improvement as I move toward full-time employment in IT or data.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- BITE-SIZED STORIES SECTION -->
+    <section id="bite-sized-stories">
+      <div class="section-card">
+        <div class="section-header">
+          <h2>Bite-Sized Stories</h2>
+          <div class="section-meta">A short, focused learning moment captured in video.</div>
+        </div>
+
+        <p>
+          This bite-sized story explains how I learned the difference between
+          <strong>risks</strong> and <strong>issues</strong>.
+        </p>
+
+        <button class="btn-primary" id="openBiteVideo">Watch Risk vs. Issues Video</button>
+      </div>
+
+      <!-- Modal -->
+      <div class="modal-overlay" id="biteVideoModal" aria-hidden="true">
+        <div class="modal-content">
+          <button class="modal-close" id="closeBiteVideo" aria-label="Close video">&times;</button>
+          <h3>Risk vs. Issues – Bite-Sized Story</h3>
+          <p style="font-size: 0.9rem; margin-top: 4px; margin-bottom: 8px;">
+            In this short video, I explain how I learned to separate risks from issues and how that
+            helped me think more clearly about project challenges and planning.
+          </p>
+          <video controls class="modal-video" id="biteVideo">
+            <source src="Risks vs issues.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMPREHENSIVE PROJECT CLOSURE DOCUMENT SECTION (COLLAPSIBLE) -->
+    <section id="project-closure-document">
+      <div class="section-card">
+        <div class="section-header">
+          <h2>Comprehensive Project Closure Document</h2>
+          <div class="section-meta">Formal summary of project information, performance, lessons learned, and next steps.</div>
+        </div>
+
+        <details class="closure-block" open>
+          <summary><span class="label">1. Project Information</span></summary>
+          <div class="closure-block-content">
+            <label for="project-title"><strong>Project Title</strong></label>
+            <input type="text" id="project-title" value="Preparing for an Entry-Level IT Job" />
+
+            <label for="project-manager"><strong>Project Manager</strong></label>
+            <input type="text" id="project-manager" value="David Montes" />
+
+            <label for="project-description"><strong>Project Description</strong></label>
+            <textarea id="project-description">Semester-long project to prepare for an entry-level IT / data-focused job by combining career research, skills development, certifications, and professional branding. Researched IT, database, and support roles; identified hiring expectations; completed targeted online courses; and built a professional toolkit (resume, LinkedIn, elevator pitch, and project website) showing readiness for roles such as help desk, database, and data-focused positions.</textarea>
+
+            <label for="closure-type"><strong>Project Closure Type</strong></label>
+            <select id="closure-type">
+              <option value="">Select closure type...</option>
+              <option value="planned" selected>Planned / Successful Closure</option>
+              <option value="premature">Premature Closure</option>
+              <option value="failed">Failed / Not Completed</option>
+              <option value="transitioned">Transitioned to Operations / Maintenance</option>
+            </select>
+
+            <label for="closing-summary"><strong>Closing Summary</strong></label>
+            <textarea id="closing-summary">The project closed successfully. I met core goals: understanding realistic IT career paths, strengthening key technical skills, earning relevant online credentials, and creating career tools (resume, LinkedIn, elevator pitch, and website). I also submitted real job applications for data-focused roles, moving closer to my long-term career objectives. Informational interviews were only partially completed due to scheduling challenges, but the majority of deliverables were finished, and I gained clarity, confidence, and momentum for next steps in IT and data-related careers.</textarea>
+          </div>
+        </details>
+
+        <details class="closure-block">
+          <summary><span class="label">2. Deliverables Summary</span></summary>
+          <div class="closure-block-content">
+            <p class="helper-text">List all major deliverables and track their completion status. Cells are editable.</p>
+            <table>
+              <thead>
+                <tr>
+                  <th>Deliverable Name</th>
+                  <th>Original Definition of Done</th>
+                  <th>Actual Progress</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td contenteditable="true">1. Skill Identification &amp; Research</td>
+                  <td contenteditable="true">Research database designer/DBA and IT help desk roles; review job postings; identify responsibilities and key skills; summarize findings on the project website.</td>
+                  <td contenteditable="true">Researched database and IT support roles; documented responsibilities, skills, and requirements; added findings to the Skill Identification section; research progress: 100%.</td>
+                  <td contenteditable="true">Completed</td>
+                </tr>
+                <tr>
+                  <td contenteditable="true">2. Learn Other Required Skills from Research</td>
+                  <td contenteditable="true">Identify skill gaps (SQL depth, database design, troubleshooting, customer service) and close them through structured learning and practice.</td>
+                  <td contenteditable="true">Strengthened SQL and database design through practice; used SQLite/other RDBMS tools; completed IT technician and help desk learning content; documented key concepts and outcomes.</td>
+                  <td contenteditable="true">Completed</td>
+                </tr>
+                <tr>
+                  <td contenteditable="true">3. Alison Courses</td>
+                  <td contenteditable="true">Complete core Alison courses supporting database and IT support career goals with passing scores and reflect on their value.</td>
+                  <td contenteditable="true">Completed "Introduction to Database Concepts" (80%) and "Essentials of Information Technology Technician Skills" (88%); captured learning outcomes, screenshots, and relevance to career paths.</td>
+                  <td contenteditable="true">Completed</td>
+                </tr>
+                <tr>
+                  <td contenteditable="true">4. Career Qualifications &amp; Progress Website</td>
+                  <td contenteditable="true">Build a website organized into six deliverables, presenting research, skills, coursework, interviews, and job applications in a professional format.</td>
+                  <td contenteditable="true">Created a multi-section website aligned with course deliverables; documented research, skills, courses, interviews plan, and applications; added career tools and progress notes.</td>
+                  <td contenteditable="true">Completed (ongoing refinements)</td>
+                </tr>
+                <tr>
+                  <td contenteditable="true">5. Interviewing Professionals</td>
+                  <td contenteditable="true">Conduct informational interviews with professionals in database and IT support roles; prepare question bank; document insights and impact on career plan.</td>
+                  <td contenteditable="true">Built a detailed question bank and identified potential LinkedIn contacts; documented why informational interviews matter. Due to low response rates and time limits, this deliverable was only partially completed by closure, but the structure and outreach plan are in place.</td>
+                  <td contenteditable="true">Partially Completed / At Risk</td>
+                </tr>
+                <tr>
+                  <td contenteditable="true">6. Job Applications</td>
+                  <td contenteditable="true">Apply to internships or entry-level roles aligned with database, IT support, data entry, and data analyst skills; track applications and supporting evidence.</td>
+                  <td contenteditable="true">Identified target roles; submitted applications including a Data Entry Assistant role and a Data Analyst position at East West Bank; captured typing test results and confirmation screenshots; application work: 100%.</td>
+                  <td contenteditable="true">Completed (continuing beyond project)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+
+        <details class="closure-block">
+          <summary><span class="label">3. Change Log</span></summary>
+          <div class="closure-block-content">
+            <p class="helper-text">Summarize major scope or plan changes.</p>
+            <table>
+              <thead>
+                <tr>
+                  <th>Change No</th>
+                  <th>Date</th>
+                  <th>Change</th>
+                  <th>Reason</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td contenteditable="true">1</td>
+                  <td contenteditable="true">10/20/2025</td>
+                  <td contenteditable="true">Broadened project goal from only database design to preparing for an entry-level IT / data role.</td>
+                  <td contenteditable="true">Research and feedback showed my interests and opportunities included both database and IT support paths.</td>
+                </tr>
+                <tr>
+                  <td contenteditable="true">2</td>
+                  <td contenteditable="true">10/27/2025</td>
+                  <td contenteditable="true">Adjusted deliverables and milestones after professor feedback; clarified Agile-style approach.</td>
+                  <td contenteditable="true">Needed better alignment between goals, deliverables, and course expectations.</td>
+                </tr>
+                <tr>
+                  <td contenteditable="true">3</td>
+                  <td contenteditable="true">11/03/2025</td>
+                  <td contenteditable="true">Focused "certifications" on Alison courses instead of other short-term certificates.</td>
+                  <td contenteditable="true">Alison offered accessible, verifiable courses that fit the semester timeline.</td>
+                </tr>
+                <tr>
+                  <td contenteditable="true">4</td>
+                  <td contenteditable="true">11/17/2025</td>
+                  <td contenteditable="true">Moved some learning and interview milestones later in November.</td>
+                  <td contenteditable="true">Original dates were too aggressive given overall course workload.</td>
+                </tr>
+                <tr>
+                  <td contenteditable="true">5</td>
+                  <td contenteditable="true">12/01/2025</td>
+                  <td contenteditable="true">Reduced emphasis on completing all interviews before semester end; prioritized website and applications.</td>
+                  <td contenteditable="true">Low response from LinkedIn contacts and time limits required focusing on highest-impact deliverables.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+
+        <details class="closure-block">
+          <summary><span class="label">4. Performance Analysis</span></summary>
+          <div class="closure-block-content">
+            <h4>4.1 Budget Performance</h4>
+            <textarea>The project stayed within budget by relying on free or student-access tools and resources. I used Jira, Trello, Microsoft Project, Alison courses, and LinkedIn Learning via free or school access. The website used GitHub Pages, so there were no hosting costs. The main cost was time and effort, not money, and no unexpected paid tools or hardware were needed.</textarea>
+            <h4>4.2 Schedule Performance</h4>
+            <textarea>Schedule performance was mixed but acceptable. Many milestones (research, skills, Alison courses) were completed near planned dates, supported by weekly status reports. Several weeks were "AT RISK", especially around interviews and some learning tasks. Causes included balancing other coursework, underestimating course/time requirements, and difficulty scheduling interviews. I responded by updating deadlines, prioritizing key deliverables, and accepting that some interview work would continue beyond the semester.</textarea>
+          </div>
+        </details>
+
+        <details class="closure-block">
+          <summary><span class="label">5. Stakeholder Management</span></summary>
+          <div class="closure-block-content">
+            <textarea>Key stakeholders were: myself (project manager and primary beneficiary), my instructor (Professor Espinoza), classmates, potential interviewees and future employers, and supporting stakeholders such as family. I managed my own work through Jira boards and status reports, adjusted scope and schedule as needed, and incorporated instructor feedback into updated goals and deliverables. Classmates provided informal feedback on the website and project direction. For external stakeholders, I used LinkedIn outreach and shaped my deliverables (resume, LinkedIn, website) around what employers look for. Not all professionals responded, but the outreach process and question bank will support future networking. Overall, communication was effective when started early and backed by clear questions and updates.</textarea>
+          </div>
+        </details>
+
+        <details class="closure-block">
+          <summary><span class="label">6. Risk and Issue Summary</span></summary>
+          <div class="closure-block-content">
+            <textarea>Several planned risks appeared during the project:
+- Falling behind on learning/research milestones: occurred mid-semester and showed up in status reports. I caught up by focusing on key tasks and adjusting deadlines.
+- Difficulty finding professionals to interview: became a real issue near closing when LinkedIn outreach produced few confirmed interviews. I documented the plan, outreach, and partial completion and treated interviews as ongoing beyond the course.
+- Time pressure from multiple classes: affected several weeks, especially during certifications and website/application work. I narrowed scope, prioritized high-value tasks, and used my project tools to decide what to tackle first.
+
+No critical unresolved issues remain at closure, but ongoing risks include keeping skills current, continuing job applications, and completing more interviews and networking.</textarea>
+          </div>
+        </details>
+
+        <details class="closure-block">
+          <summary><span class="label">7. What Went Well? – Successes</span></summary>
+          <div class="closure-block-content">
+            <textarea>Highlights include:
+- Agile-style approach fit the evolving career focus; I iterated on goals and deliverables instead of following a rigid plan.
+- Weekly status reports helped monitor progress, surface risks, and decide what to adjust.
+- Jira and other tools made it easier to visualize work and break it into manageable tasks.
+- Clear deliverables (research, skills, certifications, tools, interviews, applications) provided a roadmap and visible progress.
+- Completing Alison/online courses created proof of new skills.
+- Building the website and updating resume/LinkedIn created professional artifacts I can immediately use in real job searches.</textarea>
+          </div>
+        </details>
+
+        <details class="closure-block">
+          <summary><span class="label">8. What Didn't Go Well? – Challenges</span></summary>
+          <div class="closure-block-content">
+            <textarea>Main challenges:
+- Informational interviews were harder to complete; many LinkedIn contacts did not respond or could not schedule in time.
+- Some milestones were initially too aggressive given a full semester of coursework.
+- Several weeks were "AT RISK" due to competing deadlines and underestimated task duration.
+- Scope evolved as I realized both IT help desk and data roles interested me, causing some rework in goals and deliverables.
+- Keeping all documentation fully updated while also finishing courses, the website, and applications was difficult near the end.</textarea>
+          </div>
+        </details>
+
+        <details class="closure-block">
+          <summary><span class="label">9. What Would You Do Differently? – Improvements</span></summary>
+          <div class="closure-block-content">
+            <textarea>If starting over, I would:
+- Begin outreach and interview requests much earlier.
+- Start with slightly fewer or simpler deliverables, then add more once the pace is clear.
+- Build a schedule with specific buffer time for catch-up work.
+- Keep documentation and website content updated every week.
+- Use short weekly retrospectives to decide what to focus on and adjust priorities sooner.</textarea>
+          </div>
+        </details>
+
+        <details class="closure-block">
+          <summary><span class="label">10. Lessons Learned Register</span></summary>
+          <div class="closure-block-content">
+            <p class="helper-text">At least five key lessons from throughout the project.</p>
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>SDLC Stage</th>
+                  <th>Problem</th>
+                  <th>Consequence</th>
+                  <th>Lesson</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>09/29/2025</td>
+                  <td>Initiation / Planning</td>
+                  <td>Scope and career focus were broad and unclear between database, IT support, and data roles.</td>
+                  <td>Uncertainty about priorities and later rework of the goal and charter.</td>
+                  <td>Clarify the problem and desired outcome early; use research and feedback to narrow scope.</td>
+                </tr>
+                <tr>
+                  <td>10/20/2025</td>
+                  <td>Planning / Execution</td>
+                  <td>Original goal and some deliverables did not match updated understanding of IT careers.</td>
+                  <td>Needed to rework goals and deliverables mid-project.</td>
+                  <td>Expect some change, but validate assumptions early with instructor/mentor feedback.</td>
+                </tr>
+                <tr>
+                  <td>10/27/2025</td>
+                  <td>Execution / Monitoring</td>
+                  <td>Underestimated time for courses, practice, and documentation alongside other classes.</td>
+                  <td>Several "AT RISK" weeks and rescheduled milestones.</td>
+                  <td>Use conservative estimates and include buffer time for learning-heavy tasks.</td>
+                </tr>
+                <tr>
+                  <td>11/11/2025</td>
+                  <td>Execution / Monitoring</td>
+                  <td>Started online courses later than ideal.</td>
+                  <td>Compressed schedule and less flexibility for difficult topics or deadlines.</td>
+                  <td>Begin long-running tasks early and make steady weekly progress.</td>
+                </tr>
+                <tr>
+                  <td>12/01/2025</td>
+                  <td>Closing</td>
+                  <td>Relied on external people for interviews and received few responses in time.</td>
+                  <td>Interviewing Professionals deliverable only partially complete by closure.</td>
+                  <td>Treat external stakeholders as dependencies; start outreach early and have backups.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+
+        <details class="closure-block">
+          <summary><span class="label">11. Key Takeaways for Future Projects</span></summary>
+          <div class="closure-block-content">
+            <textarea>1) Start with a focused, realistic scope that fits one semester and adjust using Agile-style iterations. 2) Use weekly status reports and a visual tool (like Jira) to track progress and risks. 3) Start long-lead work (certifications, outreach) early. 4) Build resume, LinkedIn, and portfolio alongside learning, not at the last minute. 5) Treat each deliverable as evidence toward your career goal, not just a class assignment.</textarea>
+          </div>
+        </details>
+
+        <details class="closure-block">
+          <summary><span class="label">12. Formal Sign-Off</span></summary>
+          <div class="closure-block-content">
+            <textarea>Project Manager (Student):
+I, David Montes, confirm that core deliverables—research, skill development, online courses, career tools (resume, LinkedIn, elevator pitch, website), and real job applications—have been completed to the best of my ability within the semester timeframe.
+
+Stakeholder Feedback:
+- Instructor (Professor Espinoza): Provided guidance and feedback on refining goals, aligning deliverables, and improving charter/status reporting.
+- Classmates / Peers: Shared comments on the website, career tools, and clarity of the project.
+- External Stakeholders: Even where responses were limited, their public profiles and postings informed my research.
+
+Sign-Off:
+By closing this project, I acknowledge that deliverables have been completed or clearly documented with their current status (e.g., partially completed interviews). This project meets course expectations and forms a foundation for my ongoing IT and data career journey.</textarea>
+          </div>
+        </details>
+
+        <details class="closure-block">
+          <summary><span class="label">13. Recognition</span></summary>
+          <div class="closure-block-content">
+            <textarea>I would like to recognize:
+- Professor Espinoza for guidance and feedback on direction, scope, and deliverables.
+- Classmates for suggestions on the website, career tools, and project approach.
+- Online instructors and course creators whose materials helped me build technical skills.
+- Professionals whose public profiles, posts, and job descriptions informed my understanding of IT and data roles.
+- Family and friends for encouragement and support throughout the semester.</textarea>
+          </div>
+        </details>
+
+        <details class="closure-block">
+          <summary><span class="label">14. What's Next</span></summary>
+          <div class="closure-block-content">
+            <textarea>Next steps:
+- Continue applying for entry-level IT, help desk, data entry, and data analyst roles using my updated materials.
+- Expand skills with more SQL and data analysis practice and consider certifications (e.g., CompTIA, Google IT Support/Analytics) as time and budget allow.
+- Complete additional informational interviews to refine my direction and learn from real-world experience.
+- Keep my career website and LinkedIn profile updated with new projects and accomplishments.
+- Apply project management lessons (Agile thinking, risk management, realistic scheduling) to future academic, personal, and professional projects.</textarea>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- PEER REVIEWS SECTION -->
+    <section id="peer-reviews">
+      <div class="section-card">
+        <div class="section-header">
+          <h2>Peer Reviews &amp; Reflection</h2>
+          <div class="section-meta">Document feedback received and how it influenced your work.</div>
+        </div>
+
+        <h3>Peer Reviewer 1</h3>
+        <textarea placeholder="Why did you choose this reviewer? What feedback did they give? How did you use it?"></textarea>
+
+        <h3>Peer Reviewer 2</h3>
+        <textarea placeholder="Document feedback from reviewer #2 here..."></textarea>
+
+        <h3>Final Reflection</h3>
+        <textarea placeholder="Summarize what you learned, what changed, and how you grew through this project..."></textarea>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    &copy; <span id="year"></span> Project Closure – Preparing for an Entry-Level IT Job
+  </footer>
+
+  <script>
+    // Year in footer
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Modal video logic
+    const openBtn = document.getElementById("openBiteVideo");
+    const closeBtn = document.getElementById("closeBiteVideo");
+    const modal = document.getElementById("biteVideoModal");
+    const video = document.getElementById("biteVideo");
+
+    if (openBtn && closeBtn && modal && video) {
+      openBtn.addEventListener("click", () => {
+        modal.style.display = "flex";
+        modal.setAttribute("aria-hidden", "false");
+      });
+
+      const closeModal = () => {
+        modal.style.display = "none";
+        modal.setAttribute("aria-hidden", "true");
+        video.pause();
+        video.currentTime = 0;
+      };
+
+      closeBtn.addEventListener("click", closeModal);
+
+      // Close when clicking outside content
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) closeModal();
+      });
+
+      // Close on Escape key
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && modal.style.display === "flex") {
+          closeModal();
+        }
+      });
+    }
+  </script>
+</body>
+</html>
